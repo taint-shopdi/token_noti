@@ -1,0 +1,56 @@
+{
+  "name": "core.api",
+  "version": "1.0.0",
+  "description": "apis for Core Project",
+  "main": "server.js",
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@hapi/cookie": "^12.0.1",
+    "@hapi/glue": "^9.0.1",
+    "@hapi/hapi": "^21.3.0",
+    "@hapi/inert": "^7.0.1",
+    "@hapi/jwt": "^3.1.0",
+    "@hapi/vision": "^7.0.1",
+    "abi-decoder": "^2.4.0",
+    "axios": "^1.6.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "hapi-swagger": "^17.1.0",
+    "joi": "^17.8.3",
+    "joi-extension-multihash": "^2.0.0",
+    "knex": "^0.16.3",
+    "moment": "^2.29.3",
+    "moment-timezone": "^0.5.26",
+    "mongoose": "^7.0.1",
+    "mysql": "^2.16.0",
+    "parse-duration": "^1.0.2",
+    "pg": "^8.7.1",
+    "query-string": "^6.5.0",
+    "request": "^2.88.0",
+    "sha1": "^1.1.1",
+    "sha256": "^0.2.0",
+    "web3": "^4.3.0",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.2.0",
+    "nodemon": "^3.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pm2 start server.js --name apis --watch",
+    "startidr": "pm2 start server.js --name apis --watch",
+    "eslint": "./node_modules/.bin/eslint ./*/*.js",
+    "weslint": "eslint ./*/*.js",
+    "wdev": "nodemon --exec \"npm run weslint & node server\"",
+    "dev": "nodemon --exec \"npm run eslint & node server\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:tdsolution/apis.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "git@github.com:tdsolution/apis.git"
+}
