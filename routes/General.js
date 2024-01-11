@@ -15,24 +15,5 @@ module.exports = {
                 chain: Joi.string().required()
             })
         },
-        plugins: {
-            'hapi-swagger': {
-              responses: {
-                200: {
-                  schema: Joi.object({
-                      message: 'success',
-                      data: Joi.object({
-                        method: Joi.string(),
-                        inputs: Joi.array().items(Joi.object({
-                            value: Joi.any(),
-                            type: Joi.string()
-                        })),
-                        abi: Joi.string()
-                      })
-                  })
-                }
-              }
-            }
-          }
     },
 }

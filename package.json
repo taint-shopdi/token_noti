@@ -48,9 +48,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:tdsolution/apis.git"
+    "url": "git+ssh://git@github.com:core-stake/apis.git"
   },
   "author": "",
   "license": "ISC",
-  "homepage": "git@github.com:tdsolution/apis.git"
+  "homepage": "git@github.com:core-stake/apis.git"
 }

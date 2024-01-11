@@ -5,7 +5,7 @@ module.exports = {
   getPrice: async (req) => {
     const { chain, address } = req.query;
     try {
-        const res = await (await fetch(`https://api.dextools.io/v1/token?chain=${chain}&address=${address}`, {
+        const res = await (await fetch(`https://api.dextools.io/v1/pair?chain=${chain}&address=${address}`, {
           headers: {
             "X-API-KEY": DEXTOOL_API_KEY,
           }
