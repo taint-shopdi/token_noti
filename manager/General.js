@@ -23,8 +23,9 @@ const options = {
   },
 };
 const provider = new Web3.providers.WebsocketProvider(
-  "wss://ethereum.publicnode.com",
-  options
+  // "wss://mainnet.infura.io/ws/v3/bd0eea5ad04549fea3de66a1cfe62ca0",
+  "wss://ethereum.publicnode.com"
+  // options
 );
 const web3 = new Web3(provider);
 
@@ -310,38 +311,65 @@ CA: ${address}
 🔗 Code (https://etherscan.io/address/${address})
 _______________
 `;
-    await sendTeleMessage(message);
+    return sendTeleMessage(message);
   } catch (e) {
     // return false
+    console.log("push err", e.message)
     throw e;
   }
 };
-
+let count = 0
 const listen = async () => {
+  if (count === 0) {
+    sendTeleMessage("start")
+  } else {
+    sendTeleMessage("restart " + count)
+  }
+  count++
+  // console.log( web3.utils.sha3('NewPublication(address,uint256,bytes32,string,string)'))
   try {
+    const options = {
+      reconnect: {
+          auto: true,
+          delay: 5000, // ms
+          maxAttempts: 5,
+          onTimeout: false
+      },
+      // topics: [
+      //     web3.utils.sha3('NewPublication(address,uint256,bytes32,string,string)')
+      // ],
+      // fromBlock: 20027607,
+      // toBlock: 'latest'
+  };
     const subscription = await web3.eth.subscribe("logs");
     console.log("run");
+    subscription.on('connected', nr => console.log(nr))
     subscription.on("data", (tx) => {
-    //   console.log(tx);
+      console.log(tx);
       web3.eth
         .getTransactionReceipt(tx.transactionHash)
         .then(async (receipt) => {
           if (!receipt.to) {
-            // console.log({ receipt, tx });
+            console.log({ receipt, tx });
             try {
               const data = await checkIsTokenContract(receipt.contractAddress);
               if (data) {
-                await pushTele({ ...data, address: receipt.contractAddress });
+                return pushTele({ ...data, address: receipt.contractAddress });
               }
             } catch (error) {
+              console.log("er", error.message)
               // throw error
             }
           }
-        }).catch(() => console.log("fail"));
+        }).catch((e) => console.log("fail", tx.transactionHash, e.message));
     });
+    // subscription.on('data', event => console.log(event))
+    // subscription.on('changed', changed => console.log(changed))
+    subscription.on('error', err => console.log ('error', err.message, err.stack))
+    // subscription.on('connected', nr => console.log(nr))
   } catch (e) {
     // await sendTeleMessage("Stop")
-    // throw e;
+    throw e;
   }
 };
 
