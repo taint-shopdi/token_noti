@@ -16,6 +16,8 @@ const parse = require('parse-duration')
 const dbUrl = require("./config/mongodb")
 const {port}      = Manifest.server
 
+require('./manager/General')
+
 const startServer = async () => {
   try {
     // console.log(dbUrl.connectString)

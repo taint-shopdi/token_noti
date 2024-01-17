@@ -3,7 +3,6 @@
  */
 'use strict';
 const Pac = require('../package.json');
-const General = require('../routes/General')
 
 module.exports = [
   {
@@ -17,7 +16,5 @@ module.exports = [
       }
     }
   },
-
-  { method: 'GET', path: '/token', config: General.getPrice },
     
   ]
