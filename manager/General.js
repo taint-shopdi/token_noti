@@ -19,7 +19,7 @@ const options = {
     auto: true,
     delay: 1000, // ms
     maxAttempts: 10,
-    // onTimeout: false,
+    onTimeout: false,
   },
 };
 const provider = new Web3.providers.WebsocketProvider(
@@ -322,7 +322,7 @@ const listen = async () => {
     const subscription = await web3.eth.subscribe("logs");
     console.log("run");
     subscription.on("data", (tx) => {
-      console.log(tx);
+    //   console.log(tx);
       web3.eth
         .getTransactionReceipt(tx.transactionHash)
         .then(async (receipt) => {
@@ -337,7 +337,7 @@ const listen = async () => {
               // throw error
             }
           }
-        }).catch(e => console.log("fail"));
+        }).catch(() => console.log("fail"));
     });
   } catch (e) {
     // await sendTeleMessage("Stop")
@@ -349,5 +349,4 @@ provider.on("connect", listen);
 provider.on("disconnect", () => {
   console.log("disconnect");
 });
-
 // listen();
