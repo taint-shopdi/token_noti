@@ -1,10 +1,33 @@
 "use strict";
 const { Web3 } = require("web3");
 const { sendTeleMessage } = require("../utils/telegram");
+const options = {
+  timeout: 30000, // ms
 
-const web3 = new Web3(
-  new Web3.providers.WebsocketProvider("wss://ethereum.publicnode.com")
+  clientConfig: {
+    // Useful if requests are large
+    // maxReceivedFrameSize: 100000000, // bytes - default: 1MiB
+    // maxReceivedMessageSize: 100000000, // bytes - default: 8MiB
+
+    // Useful to keep a connection alive
+    keepalive: true,
+    keepaliveInterval: -1, // ms
+  },
+
+  // Enable auto reconnection
+  reconnect: {
+    auto: true,
+    delay: 1000, // ms
+    maxAttempts: 10,
+    // onTimeout: false,
+  },
+};
+const provider = new Web3.providers.WebsocketProvider(
+  "wss://ethereum.publicnode.com",
+  options
 );
+const web3 = new Web3(provider);
+
 const test = async () => {
   // const [blockNum, count] = await Promise.all([
   //   web3.eth.getBlockNumber(),
@@ -297,13 +320,14 @@ _______________
 const listen = async () => {
   try {
     const subscription = await web3.eth.subscribe("logs");
-    console.log("run")
+    console.log("run");
     subscription.on("data", (tx) => {
+      console.log(tx);
       web3.eth
         .getTransactionReceipt(tx.transactionHash)
         .then(async (receipt) => {
           if (!receipt.to) {
-            console.log({ receipt, tx });
+            // console.log({ receipt, tx });
             try {
               const data = await checkIsTokenContract(receipt.contractAddress);
               if (data) {
@@ -313,11 +337,17 @@ const listen = async () => {
               // throw error
             }
           }
-        });
+        }).catch(e => console.log("fail"));
     });
   } catch (e) {
-    throw e;
+    // await sendTeleMessage("Stop")
+    // throw e;
   }
 };
 
-listen();
+provider.on("connect", listen);
+provider.on("disconnect", () => {
+  console.log("disconnect");
+});
+
+// listen();
